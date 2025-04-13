@@ -1,0 +1,17 @@
+# RStudio junk
+.Rhistory
+.RData
+.Rproj.user/
+
+# Knitted markdown artifacts
+*.utf8.md
+*.knit.md
+*.nb.html
+
+# Output files (optional to keep)
+# outputs/*.xlsx
+# analysis/*.png
+
+# Local OS files
+.DS_Store
+Thumbs.db
