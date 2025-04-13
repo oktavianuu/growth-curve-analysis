@@ -1,7 +1,7 @@
-who_bh <- read_excel("data/who/who_height.xlsx")
+who_bh_raw <- read_excel("data/who/who_height.xlsx")
 
 # select z-scores only
-who_bw <- who_bw_raw %>%
+who_bh <- who_bh %>%
   select(Month, SD3neg, SD2neg, SD0, SD2, SD3) %>%
   rename(
     Age = Month,
