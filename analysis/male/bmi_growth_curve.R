@@ -1,5 +1,5 @@
 # ================================================================
-# WHO-Style Growth Curve Modeling (Weight-for-Age, Boys)
+# WHO-Style Growth Curve Modeling (BMI-for-Age, Boys)
 # Study Location: Desa Jungkat, Kecamatan Jongkat, Pontianak, West Kalimantan
 # Model: BCPE Distribution using GAMLSS
 # ================================================================
@@ -25,7 +25,7 @@ data_boys_60 <- read.csv("data/data_boys_60.csv")
 # Model Fitting using GAMLSS with BCPE distribution
 # ================================================================
 
-boys_bcpe <- gamlss(
+boys_bmi_bcpe <- gamlss(
   bw ~ pb(age), 
   sigma.fo = ~ pb(age), 
   nu.fo = ~ pb(age), 
@@ -39,8 +39,8 @@ boys_bcpe <- gamlss(
 # ================================================================
 
 Z_scores <- c(-3, -2, 0, 2, 3)
-zscore_pred <- centiles.pred(
-  boys_bcpe,
+zscore_pred_bmi <- centiles.pred(
+  boys_bmi_bcpe,
   xname = "age",
   xvalues = 1:60,
   type = "standard-centiles",
@@ -49,14 +49,14 @@ zscore_pred <- centiles.pred(
 )
 
 # Convert to long-form for plotting
-zscore_df <- as.data.frame(zscore_pred)
-colnames(zscore_df) <- c("Age", paste0("Z", Z_scores))
+zscore_df_bmi <- as.data.frame(zscore_pred_bmi)
+colnames(zscore_df_bmi) <- c("Age", paste0("Z", Z_scores))
 
-plot_df <- zscore_df %>%
+plot_df_bmi <- zscore_df_bmi %>%
   pivot_longer(cols = -Age, names_to = "Z", values_to = "Value") %>%
   mutate(Label = Z)
 
-label_df <- plot_df %>%
+label_df_bmi <- plot_df_bmi %>%
   filter(Age == max(Age))  # Tip labels at Age = 60
 
 # ================================================================
@@ -70,11 +70,11 @@ yearly_lines <- data.frame(x = seq(12, 60, 12))
 # WHO-style Plot
 # ================================================================
 
-ggplot(plot_df, aes(x = Age, y = Value, color = Z, linetype = Z)) +
+ggplot(plot_df_bmi, aes(x = Age, y = Value, color = Z, linetype = Z)) +
   geom_line(size = 1) +
   geom_vline(data = monthly_lines, aes(xintercept = x), color = "grey85", size = 0.3) +
   geom_vline(data = yearly_lines, aes(xintercept = x), color = "grey50", size = 0.8) +
-  geom_text(data = label_df, aes(label = Label), 
+  geom_text(data = label_df_bmi, aes(label = Label), 
             hjust = -0.1, vjust = 0.5, size = 3) +
   scale_x_continuous(
     breaks = seq(12, 60, 12),
@@ -91,8 +91,8 @@ ggplot(plot_df, aes(x = Age, y = Value, color = Z, linetype = Z)) +
   scale_linetype_manual(values = rep("solid", 5)) +
   labs(
     x = "Age (years)",
-    y = "Weight (kg)",
-    #title = "Weight-for-Age Z-Score Reference Curves (BCPE Model)"
+    y = "BMI",
+    # title = "Weight-for-Age Z-Score Reference Curves (BCPE Model)"
   ) +
   theme_minimal() +
   theme(
@@ -107,4 +107,4 @@ ggplot(plot_df, aes(x = Age, y = Value, color = Z, linetype = Z)) +
 # 💾 Save the Z-score Table to Excel
 # ================================================================
 
-write_xlsx(zscore_df, "outputs/weight_zscore_table.xlsx")
+write_xlsx(zscore_df, "outputs/bmi_zscore_table.xlsx")
