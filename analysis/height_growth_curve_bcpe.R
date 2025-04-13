@@ -91,7 +91,7 @@ ggplot(plot_df_bh, aes(x = Age, y = Value, color = Z, linetype = Z)) +
   scale_linetype_manual(values = rep("solid", 5)) +
   labs(
     x = "Age (years)",
-    y = "Weight (kg)",
+    y = "Height (cm)",
     title = "Weight-for-Age Z-Score Reference Curves (BCPE Model)"
   ) +
   theme_minimal() +
