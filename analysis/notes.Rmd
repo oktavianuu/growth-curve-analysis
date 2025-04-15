@@ -1,0 +1,5 @@
+<!-- some notes -->
+
+<!-- sort data on certain range -->
+data <- subset(data, var <= 60)
+
